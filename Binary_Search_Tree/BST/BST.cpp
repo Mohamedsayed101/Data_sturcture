@@ -47,7 +47,7 @@ class BST
         if(Pnode!= NULL){
             Inorder(Pnode->NL);
             cout<<Pnode->Data<<" ";
-            PreOrder(Pnode->NR);
+            Inorder(Pnode->NR);
         }
     }
     void PostOrder(Node* Pnode){// Left -> Right -> Root
@@ -56,6 +56,16 @@ class BST
             PostOrder(Pnode->NR);
             cout<<Pnode->Data<<" ";
         }
+    }
+    // overloading functions
+    void PreOrder(){
+        PreOrder(Root);
+    }
+    void Inorder(){
+        Inorder(Root);
+    }
+    void PostOrder(){
+        PostOrder(Root);
     }
     // Function to search an item in BST
     bool Search(Node* Pnode, int data){
@@ -68,22 +78,24 @@ class BST
         else
             return true;
     }
-    // Destructor to free memory
-    // After deleting all nodes, we should call destructor of base class Node.
-    // Because we didn't change the Tree, we should have destructor take no parameter.
-    // So, destructor should have no return type and no parameters.
-    ~BST(){
-        // Call PostOrder to delete all nodes recursively.
-        cout<<"\nPostOrder: ";
-        PostOrder(Root);
-        cout<<"Removed from Tree \n";
-        while(Root!= NULL){
-            Node *temp = Root;
-            Root = Root->NR;
-            delete temp;
-        }
+    // overloading function
+    bool Search(int data){
+        return Search(Root, data);
+    }
+    // Function to delete an item in BST
+    Node* Delete(Node* Pnode, int data){}
+    void DestroyTree(Node* Pnode){
+        if(Pnode == NULL) return;
+        DestroyTree(Pnode->NL);
+        DestroyTree(Pnode->NR);
+    delete Pnode;
+    }
+    // overloading function
+    void DestroyTree(){
+        DestroyTree(Root);  // Delete all nodes
         cout<<"\nMemory freed\n";
     }
+
 };
 
 
@@ -95,13 +107,16 @@ int main(){
     bst.Insert(40);
     bst.Insert(70);
     bst.Insert(60);
-    cout<<"PreOrder traversal of the constructed BST is \n";
-    bst.PreOrder(bst.Root);
-    cout<<"\nInorder traversal of the constructed BST is \n";
-    bst.Inorder(bst.Root);
-    cout<<"\nPostOrder traversal of the constructed BST is \n";
-    bst.PostOrder(bst.Root);
-    cout<<"\nSearch 20 in BST? "<<(bst.Search(bst.Root, 20)? "Found" : "Not Found");
-    cout<<"\nSearch 90 in BST? "<<(bst.Search(bst.Root, 90)? "Found" : "Not Found");
+    bst.Insert(80);
+    cout<<"PreOrder traversal is: ";
+    bst.PreOrder();
+    cout<<"\nInorder traversal is: ";
+    bst.Inorder();
+    cout<<"\nPostOrder traversal is: ";
+    bst.PostOrder();
+    cout<<"\nSearch 20: "<<(bst.Search(20)? "Found" : "Not Found")<<endl;
+    cout<<"\nSearch 90: "<<(bst.Search(90)? "Found" : "Not Found" )<<endl;
+    bst.DestroyTree();
+    cout<<"\nSearch 20 after deleting: "<<(bst.Search(20)? "Found" : "Not Found")<<endl;
     return 0;
 }
