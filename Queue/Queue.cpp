@@ -34,8 +34,7 @@ public:
         Element* newnode = new Element();
         newnode->data = data;
         if(isEmpty()){
-            front = newnode;
-            back = newnode;
+            front = back = newnode;
         }
         else{
             back->next = newnode;
@@ -50,6 +49,8 @@ public:
         int data = front->data;
         Element* temp = front;
         front = front->next;
+        if(front == NULL)
+        back = NULL;
         delete temp;
         return data;
     }
